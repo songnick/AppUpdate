@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">sdk_update</string>
+    <string name="sdk_update_alert_ok_download">UpdateNow</string>
+    <string name="sdk_update_alert_downloading">Downloading</string>
+    <string name="sdk_update_alert_ok_install">Install</string>
+    <string name="sdk_update_alert_title_download">DownloadComplete</string>
+    <string name="sdk_update_alert_title_download_content">Need Install?</string>
+    <string name="sdk_update_alert_cancel_wait">NoUpdate</string>
+    <string name="sdk_update_md5_error">md5 Error</string>
+
+
+</resources>
