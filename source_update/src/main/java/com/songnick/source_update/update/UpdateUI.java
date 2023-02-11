@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.songnick.source_update.R;
 import com.songnick.source_update.SourceUpdateSDK;
@@ -110,9 +111,15 @@ public class UpdateUI {
                     int progress = (int)(soFar*1.0f/totalSize);
                     progressBar.setProgress(progress);
                     Log.i(TAG, " status:  " + status +  "progress: " + progress + soFar + "////" + totalSize);
+                    handler.postDelayed(updateProgress, 1000);
+                }else{
+                    hideProgress();
+                    if (activityWeakReference.get() != null){
+                        Toast.makeText(activityWeakReference.get(), "下载出现异常", Toast.LENGTH_LONG).show();
+                    }
                 }
                 Log.i(TAG, " status:  " + status);
-                handler.postDelayed(updateProgress, 1000);
+
             }
         }
     };

@@ -56,14 +56,14 @@ public class ApiServer {
         executor.execute(() -> {
             Response response = null;
             try {
-                response = mClient.newCall(request).execute();
-                int code = response.code();
-                if (code != 200){
-                    callback.onFail(response.message(), code);
-                }
-                String bodyStr = response.body().toString();
+//                response = mClient.newCall(request).execute();
+//                int code = response.code();
+//                if (code != 200){
+//                    callback.onFail(response.message(), code);
+//                }
+//                String bodyStr = response.body().toString();
                 //模拟测试数据
-//                String bodyStr = testResult;
+                String bodyStr = testResult;
                 JSONObject jsonObject = JSON.parseObject(bodyStr);
                 String data = jsonObject.getString("data");
                 if (data != null){
