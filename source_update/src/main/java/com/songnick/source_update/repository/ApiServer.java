@@ -117,7 +117,7 @@ public class ApiServer {
             "        \"title\":\"最新版本\",\n" +
             "        \"desc\":\"升级获取更好的体验\",\n" +
             "        \"resourceInfo\":{\n" +
-            "            \"resourceURL\":\"https://github.com/songnick/MultiThreadModel/archive/refs/heads/main.zip\",\n" +
+            "            \"resourceURL\":\"https://github.com/songnick/AppUpdate/archive/refs/heads/main.zip\",\n" +
             "            \"resourceMD5\":\"E0E0F2C83C8768AF141212DBDE89DF46\"\n" +
             "        }\n" +
             "    }\n" +

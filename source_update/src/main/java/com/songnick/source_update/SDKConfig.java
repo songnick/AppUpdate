@@ -7,12 +7,18 @@ public class SDKConfig {
 
     private String channel = null;
 
+    private String userId = null;
+
     public String getAppKey() {
         return appKey;
     }
 
     public String getChannel() {
         return channel;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     private SDKConfig(){
@@ -22,6 +28,7 @@ public class SDKConfig {
     public static final class SDKConfigBuilder {
         private String appKey;
         private String channel;
+        private String userId;
 
         public SDKConfigBuilder() {
         }
@@ -36,10 +43,16 @@ public class SDKConfig {
             return this;
         }
 
+        public SDKConfigBuilder withUserId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
         public SDKConfig build() {
             SDKConfig sDKConfig = new SDKConfig();
             sDKConfig.appKey = this.appKey;
             sDKConfig.channel = this.channel;
+            sDKConfig.userId = this.userId;
             return sDKConfig;
         }
     }

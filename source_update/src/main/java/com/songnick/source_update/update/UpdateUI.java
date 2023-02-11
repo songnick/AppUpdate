@@ -48,8 +48,8 @@ public class UpdateUI {
                 .create();
         dialog.show();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> {
-            positiveClickListener.onClick(view);
             dismissUpdateTip();
+            positiveClickListener.onClick(view);
         });
         tipDialog = dialog;
     }

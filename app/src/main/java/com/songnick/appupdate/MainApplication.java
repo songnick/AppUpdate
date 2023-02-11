@@ -12,7 +12,9 @@ public class MainApplication extends Application {
         super.onCreate();
         SDKConfig sdkConfig = new SDKConfig.SDKConfigBuilder()
                                 .withAppKey("Android")
-                                .withChannel("Official").build();
+                                .withChannel("Official")
+                                .withUserId("xxxxxx")
+                                .build();
         SourceUpdateSDK.init(this, sdkConfig);
         //apk升级检测
         CheckUpdateManager.instance().checkAppUpdate();

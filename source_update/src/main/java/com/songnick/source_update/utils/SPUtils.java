@@ -10,21 +10,19 @@ public final class SPUtils {
 
     private static final String KEY_CUR_DOWNLOAD_ID = "download_id";;
 
-    private static SPUtils instance;
-
     private SharedPreferences sp = null;
 
     private SPUtils(){
         sp = SourceUpdateSDK.getApp().getSharedPreferences("source_update_sdk", Context.MODE_PRIVATE);
     }
 
-    static {
-        instance = new SPUtils();
+    private static class Holder {
+        static SPUtils instance = new SPUtils();
     }
 
     public static SPUtils getInstance(){
 
-        return instance;
+        return Holder.instance;
     }
 
     public void setCurDownloadId(long id){

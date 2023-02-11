@@ -9,4 +9,13 @@ public interface UpdateAction {
      * @param sourcePath 待升级的资源文件路径
      * */
     void performUpdate(String sourcePath);
+
+    /***
+     * 升级过程中出现异常
+     * @param message
+     * @param code
+     * */
+    default void updateError(String message, int code) {
+
+    }
 }

@@ -168,6 +168,9 @@ public final class CheckUpdateManager {
             @Override
             public void onFail(String message, int code) {
                 Log.i(TAG, " 服务端请求异常: " + message + " code: " + code);
+                if (callbackReference.get() != null){
+                    callbackReference.get().updateError(message, code);
+                }
 //                callback.onFail(message, code);
             }
 
@@ -228,13 +231,7 @@ public final class CheckUpdateManager {
                         String md5 = MD5Utils.getMD5OfFile(file);
                         String resourceMD5 = info.getResourceInfo().resourceMD5;
                         if (!TextUtils.isEmpty(md5) && md5.equals(resourceMD5)) {
-                            handler.post(() -> {
-                                updateUI.showInstallDialog(info.isForceUpdate(), (dialogInterface, i) -> {
-                                    if (callbackReference != null && callbackReference.get() != null) {
-                                        callbackReference.get().performUpdate(path);
-                                    }
-                                });
-                            });
+                            showInstallDialog(updateUI, info, path);
                             return;
                         }
                         showToast(acReference.get().getResources().getString(R.string.sdk_update_md5_error));
@@ -247,6 +244,16 @@ public final class CheckUpdateManager {
             }
         });
 
+    }
+
+    private void showInstallDialog(UpdateUI updateUI, ResourceUpdateInfo info, String path){
+        handler.post(() -> {
+            updateUI.showInstallDialog(info.isForceUpdate(), (dialogInterface, i) -> {
+                if (callbackReference != null && callbackReference.get() != null) {
+                    callbackReference.get().performUpdate(path);
+                }
+            });
+        });
     }
 
     private void showToast(String message){
@@ -276,16 +283,11 @@ public final class CheckUpdateManager {
         Map<String, String> params = new HashMap<>();
         Application app = SourceUpdateSDK.getApp();
         params.put("appId", app.getPackageName());
-        PackageManager packageManager = app.getPackageManager();
-        try {
-            PackageInfo packageInfo = packageManager.getPackageInfo(app.getPackageName(), 0);
-            params.put("versionName", packageInfo.versionName);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
         params.put("platform", "Android");
         params.put("countryCode", app.getResources().getConfiguration().locale.getCountry());
         params.put("appKey", SourceUpdateSDK.getSDKConfig().getAppKey());
+        params.put("channel", SourceUpdateSDK.getSDKConfig().getChannel());
+        params.put("userId", SourceUpdateSDK.getSDKConfig().getUserId());
         return params;
     }
 
