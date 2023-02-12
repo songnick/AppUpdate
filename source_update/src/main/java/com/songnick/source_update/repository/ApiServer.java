@@ -5,6 +5,7 @@ import android.os.Looper;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.songnick.source_update.SourceUpdateSDK;
 import com.songnick.source_update.data.ResourceUpdateInfo;
 
 import java.util.Iterator;
@@ -23,8 +24,6 @@ public class ApiServer {
     private static final long DEFAULT_TIME_OUT = 10*1000L;
 
     private OkHttpClient mClient = null;
-    private ThreadPoolExecutor executor = null;
-
     private volatile static ApiServer instance = null;
 
     private ApiServer(){
@@ -53,7 +52,7 @@ public class ApiServer {
         }
         HttpUrl httpUrl = builder.build();
         Request request = new Request.Builder().url(httpUrl).build();
-        executor.execute(() -> {
+        SourceUpdateSDK.getInstance().execute(() -> {
             Response response = null;
             try {
                 response = mClient.newCall(request).execute();
@@ -98,13 +97,7 @@ public class ApiServer {
                 .connectTimeout(DEFAULT_TIME_OUT, TimeUnit.MILLISECONDS)
                 .retryOnConnectionFailure(true)
                 .build();
-        executor = new ThreadPoolExecutor(
-                5,
-                10,
-                1,
-                TimeUnit.SECONDS,
-                new ArrayBlockingQueue(10)
-        );
+
     }
 
 

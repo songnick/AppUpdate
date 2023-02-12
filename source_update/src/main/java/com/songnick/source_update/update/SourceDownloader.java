@@ -38,7 +38,7 @@ public class SourceDownloader {
         IntentFilter filter = new IntentFilter();
         filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         filter.addAction(DownloadManager.ACTION_NOTIFICATION_CLICKED);
-        SourceUpdateSDK.getApp().registerReceiver(new DownloadReceiver(), filter);
+        SourceUpdateSDK.getInstance().getApp().registerReceiver(new DownloadReceiver(), filter);
         mHandler = new Handler(Looper.getMainLooper());
     }
 
@@ -48,7 +48,7 @@ public class SourceDownloader {
             String[] strings = info.resourceURL.split("/");
             name = strings[strings.length - 1];
         }
-        return SourceUpdateSDK.getApp().getPackageName() + "/" + DIR_UPDATE_SOURCE + "/" + name;
+        return SourceUpdateSDK.getInstance().getApp().getPackageName() + "/" + DIR_UPDATE_SOURCE + "/" + name;
     }
 
     /***
@@ -56,7 +56,7 @@ public class SourceDownloader {
      * */
     public long starDownload(UpdateCallback<File> callback){
         this.callback = callback;
-        DownloadManager downloadManager = (DownloadManager) SourceUpdateSDK.getApp().getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager downloadManager = (DownloadManager) SourceUpdateSDK.getInstance().getApp().getSystemService(Context.DOWNLOAD_SERVICE);
         //current is downloading
         ResourceUpdateInfo info = this.mUpdateInfo;
         Uri uri = Uri.parse(info.getResourceInfo().resourceURL);
@@ -85,7 +85,7 @@ public class SourceDownloader {
                     callback.onFail("文件下载异常", -1);
                     return;
                 }
-                new Thread(() -> {
+                SourceUpdateSDK.getInstance().execute(() -> {
                     String path = getPath(context, uri);
                     try {
                         if (path != null){
@@ -99,7 +99,7 @@ public class SourceDownloader {
                     }catch (Exception e){
                         e.printStackTrace();
                     }
-                }).start();
+                });
             }
         }
     }

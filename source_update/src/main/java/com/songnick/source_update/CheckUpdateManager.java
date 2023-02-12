@@ -42,7 +42,6 @@ public final class CheckUpdateManager {
     private WeakReference<Activity> acReference = null;
     private WeakReference<UpdateAction> callbackReference = null;
     private static volatile CheckUpdateManager instance = null;
-    private ExecutorService executor = null;
     private SourceType sourceType = null;
     private String versionCode = null;
     private boolean needCheck = false;
@@ -64,8 +63,7 @@ public final class CheckUpdateManager {
     }
 
     private void init(){
-        executor = Executors.newSingleThreadExecutor();
-        SourceUpdateSDK.getApp().registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+        SourceUpdateSDK.getInstance().getApp().registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle bundle) {
                 acReference = new WeakReference<>(activity);
@@ -115,7 +113,7 @@ public final class CheckUpdateManager {
     public void checkAppUpdate(){
         int appCode = -1;
         try {
-            Application app = SourceUpdateSDK.getApp();
+            Application app = SourceUpdateSDK.getInstance().getApp();
             PackageManager packageManager = app.getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(app.getPackageName(), 0);
             appCode = packageInfo.versionCode;
@@ -132,7 +130,7 @@ public final class CheckUpdateManager {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent.setDataAndType(Uri.fromFile(new File(sourcePath)), "application/vnd.android.package-archive");
-                    SourceUpdateSDK.getApp().startActivity(intent);
+                    SourceUpdateSDK.getInstance().getApp().startActivity(intent);
                 }
             });
         }
@@ -189,7 +187,7 @@ public final class CheckUpdateManager {
                                 startDownload(result, updateUI);
                             }
                         }, view -> {
-                            executor.execute(() -> {
+                            SourceUpdateSDK.getInstance().execute(() -> {
                                 //存储再次检测的时间
                                 long time = System.currentTimeMillis() + result.getUpdateInterval();
                                 SPUtils.getInstance()
@@ -223,7 +221,7 @@ public final class CheckUpdateManager {
     }
 
     private void checkAndShowInstallDialog(String path, UpdateUI updateUI, ResourceUpdateInfo info) {
-        executor.execute(() -> {
+        SourceUpdateSDK.getInstance().execute(() -> {
             try {
                 if (path != null) {
                     File file = new File(path);
@@ -281,13 +279,13 @@ public final class CheckUpdateManager {
 
     private Map<String, String> createBaseParams(){
         Map<String, String> params = new HashMap<>();
-        Application app = SourceUpdateSDK.getApp();
+        Application app = SourceUpdateSDK.getInstance().getApp();
         params.put("appId", app.getPackageName());
         params.put("platform", "Android");
         params.put("countryCode", app.getResources().getConfiguration().locale.getCountry());
-        params.put("appKey", SourceUpdateSDK.getSDKConfig().getAppKey());
-        params.put("channel", SourceUpdateSDK.getSDKConfig().getChannel());
-        params.put("userId", SourceUpdateSDK.getSDKConfig().getUserId());
+        params.put("appKey", SourceUpdateSDK.getInstance().getSDKConfig().getAppKey());
+        params.put("channel", SourceUpdateSDK.getInstance().getSDKConfig().getChannel());
+        params.put("userId", SourceUpdateSDK.getInstance().getSDKConfig().getUserId());
         return params;
     }
 
@@ -295,10 +293,6 @@ public final class CheckUpdateManager {
      * 调用方主动释放资源
      * */
     public synchronized void release(){
-        if (!executor.isShutdown()){
-            executor.shutdownNow();
-        }
-        executor = null;
         acReference.clear();
         acReference = null;
         instance = null;

@@ -15,7 +15,7 @@ public class MainApplication extends Application {
                                 .withChannel("Official")
                                 .withUserId("xxxxxx")
                                 .build();
-        SourceUpdateSDK.init(this, sdkConfig);
+        SourceUpdateSDK.getInstance().init(this, sdkConfig);
         //apk升级检测
         CheckUpdateManager.instance().checkAppUpdate();
     }

@@ -13,7 +13,7 @@ public final class SPUtils {
     private SharedPreferences sp = null;
 
     private SPUtils(){
-        sp = SourceUpdateSDK.getApp().getSharedPreferences("source_update_sdk", Context.MODE_PRIVATE);
+        sp = SourceUpdateSDK.getInstance().getApp().getSharedPreferences("source_update_sdk", Context.MODE_PRIVATE);
     }
 
     private static class Holder {

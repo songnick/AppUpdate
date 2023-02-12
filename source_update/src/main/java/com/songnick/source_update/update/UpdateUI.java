@@ -107,7 +107,7 @@ public class UpdateUI {
         public void run() {
             if (progressDialog != null){
                 ProgressBar progressBar = progressDialog.findViewById(R.id.sdk_progress);
-                DownloadManager downloadManager = (DownloadManager) SourceUpdateSDK.getApp().getSystemService(Context.DOWNLOAD_SERVICE);
+                DownloadManager downloadManager = (DownloadManager) SourceUpdateSDK.getInstance().getApp().getSystemService(Context.DOWNLOAD_SERVICE);
                 DownloadManager.Query query = new DownloadManager.Query().setFilterById(currentId);
                 Cursor cursor = downloadManager.query(query);
                 cursor.moveToFirst();
