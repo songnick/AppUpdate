@@ -35,6 +35,9 @@ public class UpdateUI {
     }
 
     public void showUpdateDialog(ResourceUpdateInfo info, View.OnClickListener positiveClickListener, View.OnClickListener negativeClickListener ){
+        if (activityWeakReference == null || activityWeakReference.get() == null){
+            return;
+        }
         AlertDialog dialog = new AlertDialog.Builder(activityWeakReference.get())
                 .setTitle(info.getTitle()).setMessage(info.getDesc())
                 .setCancelable(info.isForceUpdate()).setPositiveButton("立即更新", null)
@@ -66,6 +69,9 @@ public class UpdateUI {
             tipDialog.dismiss();
             tipDialog = null;
         }
+        if (activityWeakReference == null || activityWeakReference.get() == null ){
+            return;
+        }
         currentId = downloadingId;
         AlertDialog dialog = new AlertDialog.Builder(activityWeakReference.get()).setView(R.layout.sdk_view_progress).show();
         progressDialog = dialog;
@@ -82,6 +88,9 @@ public class UpdateUI {
     public void showInstallDialog(boolean forceUpdate, DialogInterface.OnClickListener listener){
         if (progressDialog != null && progressDialog.isShowing()){
             progressDialog.dismiss();
+        }
+        if (activityWeakReference == null || activityWeakReference.get() == null ){
+            return;
         }
         AlertDialog dialog = new AlertDialog.Builder(activityWeakReference.get())
                 .setTitle(R.string.sdk_update_alert_title_download)
